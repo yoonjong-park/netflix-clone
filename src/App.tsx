@@ -1,5 +1,5 @@
 import React from "react";
-
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Box = styled.div`
+const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
   background-color: white;
@@ -21,7 +21,14 @@ const Box = styled.div`
 function App() {
   return (
     <Wrapper>
-      <Box />
+      <Box
+        initial={{ scale: 0 }}
+        animate={{ rotateZ: 360, scale: 1 }}
+        transition={{
+          type: "spring",
+          delay: 0.5,
+        }}
+      />
     </Wrapper>
   );
 }
