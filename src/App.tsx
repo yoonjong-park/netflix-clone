@@ -3,6 +3,7 @@ import {
   motion,
   useMotionValue,
   useMotionValueEvent,
+  useTransform,
   Variants,
 } from "framer-motion";
 import styled from "styled-components";
@@ -71,19 +72,19 @@ const circleVariants: Variants = {
 };
 
 function App() {
+  //변수 명이 css property와 같을 경우, style 내부에 그대로 넣을 수 있다.
   const x = useMotionValue(0);
-  // useMotionValue is not React Component. so NOT re rendered.
+  const scale = useTransform(x, [-800, 0, 800], [2, 1, 0]);
+  //
 
-  useMotionValueEvent(x, "change", l => {
-    console.log(l);
-  });
+  // useMotionValueEvent(x, "change", l => {
+  //   // useMotionValue is not React Component. so NOT re rendered.
+  //   console.log(l);
+  // });
 
   return (
     <Wrapper>
-      <button onClick={() => (x.get() !== 290 ? x.set(290) : x.set(0))}>
-        click me
-      </button>
-      <Box style={{ x }} drag="x" dragSnapToOrigin />
+      <Box style={{ x, scale }} drag="x" dragSnapToOrigin />
     </Wrapper>
   );
 }
