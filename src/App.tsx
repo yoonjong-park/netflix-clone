@@ -1,5 +1,10 @@
-import React, { useRef } from "react";
-import { motion, Variants } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+import {
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  Variants,
+} from "framer-motion";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -66,34 +71,19 @@ const circleVariants: Variants = {
 };
 
 function App() {
-  const biggerBoxRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  // useMotionValue is not React Component. so NOT re rendered.
+
+  useMotionValueEvent(x, "change", l => {
+    console.log(l);
+  });
 
   return (
     <Wrapper>
-      {/* Animation */}
-      {/* <Box
-        initial={{ scale: 0 }}
-        animate={{ rotateZ: 360, scale: 1 }}
-        transition={{
-          type: "spring",
-          delay: 0.5,
-        }}
-      /> */}
-      {/* Variants */}
-      {/* <Box variants={myVaris} initial="start" animate="end" /> */}
-      <BiggerBox ref={biggerBoxRef}>
-        <Box
-          drag
-          dragSnapToOrigin
-          dragElastic={1}
-          dragConstraints={biggerBoxRef}
-          variants={boxVariants}
-          whileHover="hover"
-          whileDrag="drag"
-          whileTap="tab">
-          {/* default-parent props - initial="start" animate="end" */}
-        </Box>
-      </BiggerBox>
+      <button onClick={() => (x.get() !== 290 ? x.set(290) : x.set(0))}>
+        click me
+      </button>
+      <Box style={{ x }} drag="x" dragSnapToOrigin />
     </Wrapper>
   );
 }
