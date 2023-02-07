@@ -3,17 +3,19 @@ import {
   motion,
   useMotionValue,
   useMotionValueEvent,
+  useScroll,
   useTransform,
   Variants,
 } from "framer-motion";
 import styled from "styled-components";
 
-const Wrapper = styled.div`
-  height: 100vh;
+const Wrapper = styled(motion.div)`
+  height: 200vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(135deg, #e09, #d0e);
 `;
 
 const BiggerBox = styled.div`
@@ -74,17 +76,28 @@ const circleVariants: Variants = {
 function App() {
   //변수 명이 css property와 같을 경우, style 내부에 그대로 넣을 수 있다.
   const x = useMotionValue(0);
-  const scale = useTransform(x, [-800, 0, 800], [2, 1, 0]);
-  //
+  const rotateZ = useTransform(x, [-800, 800], [-360, 360]);
+  const gradient = useTransform(
+    x,
+    [-800, 800],
+    [
+      "linear-gradient(135deg, rgb(0, 210, 238), rgb(0, 83, 238))",
+      "linear-gradient(135deg, rgb(0, 238, 155), rgb(238, 178, 0))",
+    ]
+  );
+  const { scrollY, scrollYProgress } = useScroll();
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 5]);
 
-  // useMotionValueEvent(x, "change", l => {
-  //   // useMotionValue is not React Component. so NOT re rendered.
-  //   console.log(l);
-  // });
+  useMotionValueEvent(scrollY, "change", latest => {
+    console.log("scrollY : ", latest);
+  });
+  useMotionValueEvent(scrollYProgress, "change", latest => {
+    console.log("scrollYProgress : ", latest);
+  });
 
   return (
-    <Wrapper>
-      <Box style={{ x, scale }} drag="x" dragSnapToOrigin />
+    <Wrapper style={{ background: gradient }}>
+      <Box style={{ x, scale, rotateZ }} drag="x" dragSnapToOrigin />
     </Wrapper>
   );
 }
