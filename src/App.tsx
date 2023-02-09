@@ -1,12 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import {
-  motion,
-  useMotionValue,
-  useMotionValueEvent,
-  useScroll,
-  useTransform,
-  Variants,
-} from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import styled from "styled-components";
 
 const Wrapper = styled(motion.div)`
@@ -18,38 +11,42 @@ const Wrapper = styled(motion.div)`
   background: linear-gradient(135deg, #006eff, #b3ff00);
 `;
 
-const Svg = styled.svg`
+const Box = styled(motion.div)`
   width: 400px;
-  height: 280px;
-  path {
-    stroke: white;
-    stroke-width: 3;
-  }
+  height: 200px;
+  position: absolute;
+  border-radius: 40px;
+  top: 100px;
+  margin-bottom: 20px;
+  background-color: white;
 `;
 
-const svg = {
-  start: { pathLength: 0.3, fill: "rgba(255, 255, 255, 0)" },
-  end: {
-    pathLength: 1,
-    fill: "rgba(255, 255, 255, 1)",
+const BoxVariants = {
+  initial: {
+    opacity: 0,
+    scale: 0,
   },
+  visible: { opacity: 1, scale: 1, rotateZ: 360 },
+  leaving: { opacity: 0, scale: 0, y: 20 },
 };
 
 function App() {
+  const [showing, setShowing] = useState(false);
+  const toggleShowing = () => setShowing(!showing);
+
   return (
     <Wrapper>
-      <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-        <motion.path
-          variants={svg}
-          initial="start"
-          animate="end"
-          transition={{
-            // 속성에 따라 다르게 컨트롤
-            default: { duration: 5 },
-            fill: { duration: 2, delay: 3 },
-          }}
-          d="M258.6 0c-1.7 0-3.4 .1-5.1 .5C168 17 115.6 102.3 130.5 189.3c2.9 17 8.4 32.9 15.9 47.4L32 224H29.4C13.2 224 0 237.2 0 253.4c0 1.7 .1 3.4 .5 5.1C17 344 102.3 396.4 189.3 381.5c17-2.9 32.9-8.4 47.4-15.9L224 480v2.6c0 16.2 13.2 29.4 29.4 29.4c1.7 0 3.4-.1 5.1-.5C344 495 396.4 409.7 381.5 322.7c-2.9-17-8.4-32.9-15.9-47.4L480 288h2.6c16.2 0 29.4-13.2 29.4-29.4c0-1.7-.1-3.4-.5-5.1C495 168 409.7 115.6 322.7 130.5c-17 2.9-32.9 8.4-47.4 15.9L288 32V29.4C288 13.2 274.8 0 258.6 0zM256 224a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"></motion.path>
-      </Svg>
+      <AnimatePresence>
+        {showing && (
+          <Box
+            variants={BoxVariants}
+            initial="initial"
+            animate="visible"
+            exit="leaving"
+          />
+        )}
+      </AnimatePresence>
+      <button onClick={toggleShowing}>click</button>
     </Wrapper>
   );
 }
