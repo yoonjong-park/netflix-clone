@@ -10,94 +10,46 @@ import {
 import styled from "styled-components";
 
 const Wrapper = styled(motion.div)`
-  height: 200vh;
+  height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #e09, #d0e);
+  background: linear-gradient(135deg, #006eff, #b3ff00);
 `;
 
-const BiggerBox = styled.div`
-  width: 600px;
-  height: 600px;
-  background-color: rgba(255, 255, 255, 0.4);
-  border-radius: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+const Svg = styled.svg`
+  width: 400px;
+  height: 280px;
+  path {
+    stroke: white;
+    stroke-width: 3;
+  }
 `;
 
-const Box = styled(motion.div)`
-  width: 200px;
-  height: 200px;
-  display: grid;
-  background-color: rgba(255, 255, 255, 1);
-  border-radius: 40px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-`;
-
-const Circle = styled(motion.div)`
-  background-color: white;
-  height: 70px;
-  width: 70px;
-  place-self: center;
-  border-radius: 35px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-`;
-
-const myVaris = {
-  start: { scale: 0 },
-  end: { rotateZ: 360, scale: 1, transition: { type: "spring", delay: 0.5 } },
-};
-
-const boxVariants: Variants = {
-  hover: { scale: 1.2, rotate: 90 },
-  tab: {
-    scale: 0.8,
-    rotate: -90,
-    borderRadius: "100%",
-  },
-  drag: { backgroundColor: "rgb(46,204,133)" },
-};
-
-const circleVariants: Variants = {
-  start: {
-    y: 10,
-    opacity: 0,
-  },
+const svg = {
+  start: { pathLength: 0.3, fill: "rgba(255, 255, 255, 0)" },
   end: {
-    y: 0,
-    opacity: 1,
+    pathLength: 1,
+    fill: "rgba(255, 255, 255, 1)",
   },
 };
 
 function App() {
-  //변수 명이 css property와 같을 경우, style 내부에 그대로 넣을 수 있다.
-  const x = useMotionValue(0);
-  const rotateZ = useTransform(x, [-800, 800], [-360, 360]);
-  const gradient = useTransform(
-    x,
-    [-800, 800],
-    [
-      "linear-gradient(135deg, rgb(0, 210, 238), rgb(0, 83, 238))",
-      "linear-gradient(135deg, rgb(0, 238, 155), rgb(238, 178, 0))",
-    ]
-  );
-  const { scrollY, scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 5]);
-
-  useMotionValueEvent(scrollY, "change", latest => {
-    console.log("scrollY : ", latest);
-  });
-  useMotionValueEvent(scrollYProgress, "change", latest => {
-    console.log("scrollYProgress : ", latest);
-  });
-
   return (
-    <Wrapper style={{ background: gradient }}>
-      <Box style={{ x, scale, rotateZ }} drag="x" dragSnapToOrigin />
+    <Wrapper>
+      <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <motion.path
+          variants={svg}
+          initial="start"
+          animate="end"
+          transition={{
+            // 속성에 따라 다르게 컨트롤
+            default: { duration: 5 },
+            fill: { duration: 2, delay: 3 },
+          }}
+          d="M258.6 0c-1.7 0-3.4 .1-5.1 .5C168 17 115.6 102.3 130.5 189.3c2.9 17 8.4 32.9 15.9 47.4L32 224H29.4C13.2 224 0 237.2 0 253.4c0 1.7 .1 3.4 .5 5.1C17 344 102.3 396.4 189.3 381.5c17-2.9 32.9-8.4 47.4-15.9L224 480v2.6c0 16.2 13.2 29.4 29.4 29.4c1.7 0 3.4-.1 5.1-.5C344 495 396.4 409.7 381.5 322.7c-2.9-17-8.4-32.9-15.9-47.4L480 288h2.6c16.2 0 29.4-13.2 29.4-29.4c0-1.7-.1-3.4-.5-5.1C495 168 409.7 115.6 322.7 130.5c-17 2.9-32.9 8.4-47.4 15.9L288 32V29.4C288 13.2 274.8 0 258.6 0zM256 224a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"></motion.path>
+      </Svg>
     </Wrapper>
   );
 }
