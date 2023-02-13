@@ -8,6 +8,9 @@ import App from "./App";
 import { theme } from "./theme";
 import { createGlobalStyle } from "styled-components";
 
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
+
 const GlobalStyle = createGlobalStyle`
 
 html, body, div, span, applet, object, iframe,
@@ -80,7 +83,7 @@ root.render(
     <RecoilRoot>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <App />
+        <RouterProvider router={router} />
       </ThemeProvider>
     </RecoilRoot>
   </React.StrictMode>
