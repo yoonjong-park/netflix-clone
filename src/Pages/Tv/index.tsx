@@ -1,7 +1,7 @@
 import React from "react";
 
 const Tv = () => {
-  return <>tv</>;
+  return <></>;
 };
 
 export default Tv;
