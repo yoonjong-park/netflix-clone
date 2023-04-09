@@ -3,7 +3,6 @@ import CreateDOM from "react-dom/client";
 
 import { RecoilRoot } from "recoil";
 import { ThemeProvider } from "styled-components";
-import App from "./App";
 
 import { theme } from "./theme";
 import { createGlobalStyle } from "styled-components";
